@@ -55,19 +55,35 @@ function stylePage() {
   document.body.style.justifyContent = "center";
   document.body.style.alignItems = "center";
 
-  const subwaySign = document.querySelector('#app');
-  subwaySign.style.backgroundColor = "#121212";
+  const app = document.querySelector("#app");
+  app.style.display = "flex";
+  app.style.flexDirection = "column";
+  app.style.width = "82%";
+  app.style.perspective = "10em";
+
+  const subwaySign = document.createElement("div");
+  subwaySign.id = "subway-sign";
+  subwaySign.style.backgroundColor = "#20181A";
   subwaySign.style.height = "fit-content";
-  subwaySign.style.width = "82%";
   subwaySign.style.display = "flex";
   subwaySign.style.flexDirection = "column";
   subwaySign.style.gap = "20px";
+  subwaySign.style.transform = "translateZ(5px)";
+  subwaySign.style.boxShadow = "0px 19px 16px -2px #00000066";
+  subwaySign.style.borderRadius = "2px";
+  app.appendChild(subwaySign);
+
+  const topEdgeOfSign = document.createElement("div");
+  topEdgeOfSign.style.height = "16px";
+  topEdgeOfSign.style.background = "linear-gradient(#7A7A7C, #2E2F2F)";
+  topEdgeOfSign.style.transform = "translateY(2px) rotateX(39deg)";
+  app.insertBefore(topEdgeOfSign, subwaySign);
 
   const horizontalLine = document.createElement("hr");
   horizontalLine.style.backgroundColor = "#FEFEFE";
   horizontalLine.style.height = "3px";
   horizontalLine.style.width = "100%";
-  horizontalLine.style.marginTop = "60px";
+  horizontalLine.style.marginTop = "40px";
   subwaySign.appendChild(horizontalLine);
 
   const gameContainer = document.createElement("div");
@@ -80,11 +96,11 @@ function stylePage() {
   gameContainer.style.gap = "20px";
   subwaySign.appendChild(gameContainer);
 
-  const headerWithButton = document.createElement("div");
-  headerWithButton.style.display = "flex";
-  headerWithButton.style.justifyContent = "space-between";
-  headerWithButton.style.alignItems = "center";
-  gameContainer.appendChild(headerWithButton);
+  const headerContainer = document.createElement("div");
+  headerContainer. id = "header-container";
+  headerContainer.style.display = "flex";
+  headerContainer.style.justifyContent = "space-between";
+  gameContainer.appendChild(headerContainer);
 
   const h1 = document.createElement("h1");
   h1.style.fontSize = "78px";
@@ -93,7 +109,7 @@ function stylePage() {
   h1.style.width = "75%";
   h1.style.maxWidth = "600px";
   h1.textContent = "Word Express-Lexicon";
-  headerWithButton.appendChild(h1);
+  headerContainer.appendChild(h1);
 
   const startButton = document.createElement("button");
   startButton.style.borderRadius = "100%";
@@ -106,7 +122,17 @@ function stylePage() {
   startButton.id = "start";
   startButton.value = "play game";
   startButton.innerHTML = `<img src="imgs/arrow.svg" alt="arrow pointing to top right corner" />`;
-  headerWithButton.appendChild(startButton);
+  headerContainer.appendChild(startButton);
+
+  const incorrectGuessContainer = document.createElement("div");
+  incorrectGuessContainer.id = "guesses-container";
+  incorrectGuessContainer.style.maxWidth = "300px";
+  incorrectGuessContainer.style.display = "none";
+  incorrectGuessContainer.style.justifyContent = "flex-end";
+  incorrectGuessContainer.style.fontSize = "16px";
+  incorrectGuessContainer.style.textTransform = "uppercase";
+  incorrectGuessContainer.style.gap = "6px";
+  headerContainer.appendChild(incorrectGuessContainer);
 }
 
 function createWordTiles(letterArr) {
@@ -118,7 +144,7 @@ function createWordTiles(letterArr) {
   tileContainer.style.gap = "20px";
   gameContainer.appendChild(tileContainer);
 
-  const tileColors = ['#A52A2A', '#3438C7', '#A529A3'];
+  const tileColors = ['#3438C7', '#FFC501', '#A529A3'];
   for (let letter = 0; letter < letterArr.length; letter++) {
     const tileEl = document.createElement("div");
     tileContainer.appendChild(tileEl);
@@ -150,8 +176,8 @@ function createWordTiles(letterArr) {
 
 async function playGame() {
   stylePage();
+
   const letterArr = await getLetters();
-  console.log(letterArr);
   createWordTiles(letterArr);
 
   const guessHistory = [];
@@ -177,7 +203,7 @@ async function playGame() {
         break;
     }
 
-    return window.prompt(prompt);
+    return window.prompt(prompt)[0];
   }
 
   function checkGuess() {
@@ -204,10 +230,25 @@ async function playGame() {
           correctGuesses++;
         }
       });
-    }
 
-    if (correctGuesses === letterArr.length) {
-      document.body.style.backgroundColor = "green";
+      if (correctGuesses === letterArr.length) {
+        // success ui here
+      }
+    } else if (result === "incorrect") {
+      const incorrectGuessContainer = document.querySelector("#guesses-container");
+      const incorrectGuess = document.createElement("div");
+      incorrectGuess.style.background = "red";
+      incorrectGuess.style.height = "24px";
+      incorrectGuess.style.width = "24px";
+      incorrectGuess.style.borderRadius = "100%";
+      incorrectGuess.style.display = "flex";
+      incorrectGuess.style.justifyContent = "center";
+      incorrectGuess.style.alignItems = "center";
+      incorrectGuessContainer.appendChild(incorrectGuess);
+
+      const incorrectGuessText = document.createElement("span");
+      incorrectGuess.textContent = currentGuess;
+      incorrectGuess.appendChild(incorrectGuessText);
     }
   }
 
@@ -228,8 +269,10 @@ async function playGame() {
 
   const startButton = document.querySelector("#start");
   startButton.addEventListener("click", () => {
-    startButton.style.display = 'none';
-    document.querySelector('#tile-container').style.display = 'flex';
+    startButton.style.display = "none";
+    document.querySelector('#tile-container').style.display = "flex";
+    document.querySelector('#guesses-container').style.display = "flex";
+    document.querySelector('#app').style.perspective = "16em";
     
     setTimeout(handleGuess, 200);
   });
