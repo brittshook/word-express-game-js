@@ -127,9 +127,12 @@ function stylePage() {
   const incorrectGuessContainer = document.createElement("div");
   incorrectGuessContainer.id = "guesses-container";
   incorrectGuessContainer.style.maxWidth = "300px";
+  incorrectGuessContainer.style.height = "fit-content";
   incorrectGuessContainer.style.display = "none";
   incorrectGuessContainer.style.justifyContent = "flex-end";
+  incorrectGuessContainer.style.flexWrap = "wrap";
   incorrectGuessContainer.style.fontSize = "16px";
+  incorrectGuessContainer.style.fontWeight = "500";
   incorrectGuessContainer.style.textTransform = "uppercase";
   incorrectGuessContainer.style.gap = "6px";
   headerContainer.appendChild(incorrectGuessContainer);
@@ -159,11 +162,12 @@ function createWordTiles(letterArr) {
     tileEl.style.fontWeight = "700";
 
     if (letter < 3) {
-      tileEl.style.background = tileColors[0];
+      tileEl.style.backgroundColor = tileColors[0];
     } else if (letter < 6) {
-      tileEl.style.background = tileColors[1];
+      tileEl.style.backgroundColor = tileColors[1];
+      tileEl.style.color = "#20181A";
     } else {
-      tileEl.style.background = tileColors[2];
+      tileEl.style.backgroundColor = tileColors[2];
     }
 
     const letterEl = document.createElement("p");
@@ -203,17 +207,20 @@ async function playGame() {
         break;
     }
 
-    return window.prompt(prompt)[0];
+    return window.prompt(prompt);
   }
 
   function checkGuess() {
     if (currentGuess === null) {
+      console.log('user clicked cancel');
       result = "canceled";
-    } else if (guessHistory.includes(currentGuess)) {
+    } else if (currentGuess === "" || currentGuess === undefined) {
+      result = "reload";
+    } else if (guessHistory.includes(currentGuess[0].toLowerCase())) {
       result = "repeated";
     } else {
-      guessHistory.push(currentGuess);
-      letterArr.includes(currentGuess)
+      guessHistory.push(currentGuess[0].toLowerCase());
+      letterArr.includes(currentGuess[0].toLowerCase())
         ? (result = "correct")
         : (result = "incorrect");
     }
@@ -225,7 +232,7 @@ async function playGame() {
       const matchingTiles = document.querySelectorAll(".letter");
 
       matchingTiles.forEach((tile) => {
-        if (tile.textContent === currentGuess) {
+        if (tile.textContent === currentGuess[0].toLowerCase()) {
           tile.style.display = "block";
           correctGuesses++;
         }
@@ -237,7 +244,7 @@ async function playGame() {
     } else if (result === "incorrect") {
       const incorrectGuessContainer = document.querySelector("#guesses-container");
       const incorrectGuess = document.createElement("div");
-      incorrectGuess.style.background = "red";
+      incorrectGuess.style.backgroundColor = "#D82C2C";
       incorrectGuess.style.height = "24px";
       incorrectGuess.style.width = "24px";
       incorrectGuess.style.borderRadius = "100%";
@@ -247,19 +254,18 @@ async function playGame() {
       incorrectGuessContainer.appendChild(incorrectGuess);
 
       const incorrectGuessText = document.createElement("span");
-      incorrectGuess.textContent = currentGuess;
+      incorrectGuess.textContent = currentGuess[0];
       incorrectGuess.appendChild(incorrectGuessText);
     }
   }
 
   async function handleGuess() {
-    currentGuess = getUserGuess().toLowerCase();
+    currentGuess = getUserGuess();
     checkGuess();
     updateUI();
 
-    console.log(currentGuess, correctGuesses, guessHistory);
-    console.log(guessHistory.includes(currentGuess));
-    console.log(correctGuesses < letterArr.length && currentGuess !== null);
+    console.log(currentGuess, correctGuesses);
+    console.log(guessHistory);
 
     if (correctGuesses < letterArr.length && currentGuess !== null) {
       await new Promise((resolve) => setTimeout(resolve, 400));
