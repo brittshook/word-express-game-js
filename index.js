@@ -1,35 +1,43 @@
 // Create your game here!
-const randomWordAPI = "https://random-word-api.herokuapp.com/word";
+const randomWordAPI = wordLength => `https://random-word-api.herokuapp.com/word?length=${wordLength}`;
 
 async function getRandomWord() {
     try {
-        const response = await fetch(randomWordAPI);
+      const randomWordArr = [];
+
+      for (let length = 3; length <= 7; length++) {
+        const response = await fetch(randomWordAPI(length));
         const randomWord = await response.json();
-        return randomWord[0];
+        randomWordArr.push(randomWord[0]);
+      }
+
+      return randomWordArr[Math.floor(Math.random() * randomWordArr.length)];
     } catch (error) {
         console.log("Error:", error);
+
         const wordArr = [
-            "serendipity",
-            "cozy",
-            "nebulous",
-            "snuggle",
-            "mellifluous",
-            "puzzle",
-            "quixotic",
-            "whisper",
-            "jubilant",
-            "halcyon",
-            "dazzle",
-            "meadow",
-            "ephemeral",
-            "silly",
-            "mellotron",
-            "resplendent",
-            "giggly",
-            "capricious",
-            "harmony",
-            "bubble",
+          "cozy",
+          "snuggle",
+          "puzzle",
+          "whisper",
+          "halcyon",
+          "dazzle",
+          "meadow",
+          "silly",
+          "giggly",
+          "harmony",
+          "bubble",
+          "mirth",
+          "quaint",
+          "serene",
+          "lively",
+          "jovial",
+          "bliss",
+          "azure",
+          "zoo",
+          "blithe"
         ];
+
         return wordArr[Math.floor(Math.random() * wordArr.length)];
     }
 }
@@ -68,12 +76,14 @@ function stylePage() {
   gameContainer.style.flexDirection = "column";
   gameContainer.style.fontFamily = "Armino, sans-serif";
   gameContainer.style.color = "#FEFEFE";
-  gameContainer.style.padding = "20px";
+  gameContainer.style.padding = "0 20px 20px";
+  gameContainer.style.gap = "20px";
   subwaySign.appendChild(gameContainer);
 
   const headerWithButton = document.createElement("div");
   headerWithButton.style.display = "flex";
   headerWithButton.style.justifyContent = "space-between";
+  headerWithButton.style.alignItems = "center";
   gameContainer.appendChild(headerWithButton);
 
   const h1 = document.createElement("h1");
@@ -89,26 +99,29 @@ function stylePage() {
   startButton.style.borderRadius = "100%";
   startButton.style.width = "175px";
   startButton.style.height = "175px";
-  startButton.style.cursor = 'pointer';
+  startButton.style.backgroundColor = "#FFC501";
+  startButton.style.border = "none";
+  startButton.style.cursor = "pointer";
   startButton.type = "button";
   startButton.id = "start";
   startButton.value = "play game";
-  startButton.textContent = "Play Game";
+  startButton.innerHTML = `<img src="imgs/arrow.svg" alt="arrow pointing to top right corner" />`;
   headerWithButton.appendChild(startButton);
 }
 
 function createWordTiles(letterArr) {
   const gameContainer = document.querySelector('#game-container');
+
   const tileContainer = document.createElement("div");
   tileContainer.id = 'tile-container';
   tileContainer.style.display = "none";
   tileContainer.style.gap = "20px";
   gameContainer.appendChild(tileContainer);
 
-  for (const letter of letterArr) {
+  const tileColors = ['#A52A2A', '#3438C7', '#A529A3'];
+  for (let letter = 0; letter < letterArr.length; letter++) {
     const tileEl = document.createElement("div");
     tileContainer.appendChild(tileEl);
-    tileEl.style.background = "brown";
     tileEl.style.borderRadius = "100%";
     tileEl.style.height = "140px";
     tileEl.style.width = "140px";
@@ -119,9 +132,17 @@ function createWordTiles(letterArr) {
     tileEl.style.fontSize = "48px";
     tileEl.style.fontWeight = "700";
 
+    if (letter < 3) {
+      tileEl.style.background = tileColors[0];
+    } else if (letter < 6) {
+      tileEl.style.background = tileColors[1];
+    } else {
+      tileEl.style.background = tileColors[2];
+    }
+
     const letterEl = document.createElement("p");
     letterEl.classList.add("letter");
-    letterEl.textContent = letter;
+    letterEl.textContent = letterArr[letter];
     letterEl.style.display = "none";
     tileEl.appendChild(letterEl);
   }
