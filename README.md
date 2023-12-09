@@ -29,6 +29,7 @@ This code has been broken down into two modular scripts:
 - game.js, which includes functions to handle gameplay, such as getUserGuess and checkGuess
 - style.js, which includes functions to style the game, including stylePage and createWordTiles
 
+
 ### game.js 
 My use of the BOM comes into play in the getUserGuess function, which is actually a nested function of playGame: 
 ```javascript
@@ -71,19 +72,19 @@ Assuming the guess is not null (user pressed 'Cancel' button in prompt) or undef
 From there, the guess undergoes thorough validation to account for potential scenarios such as prompt cancellation, inclusion of invalid characters, and comparison with the letters of the randomly generated word. The result variable is updated accordingly, which will inform the next prompt a user receives. If a user cancels, then a modal shows as an end to the game.
 ```javascript
 function checkGuess() {
-if (currentGuess === null) {
-    result = 'canceled';
-} else if (currentGuess === '' || currentGuess === undefined || !(/[a-zA-Z]/.test(currentGuess))) {
-    result = 'invalid';
-} else if (guessHistory.includes(currentGuess)) {
-    result = 'repeated';
-} else {
-    guessHistory.push(currentGuess);
-    letterArr.includes(currentGuess)
-    ? (result = 'correct')
-    : (result = 'incorrect');
-}
-return result;
+    if (currentGuess === null) {
+        result = 'canceled';
+    } else if (currentGuess === '' || currentGuess === undefined || !(/[a-zA-Z]/.test(currentGuess))) {
+        result = 'invalid';
+    } else if (guessHistory.includes(currentGuess)) {
+        result = 'repeated';
+    } else {
+        guessHistory.push(currentGuess);
+        letterArr.includes(currentGuess)
+        ? (result = 'correct')
+        : (result = 'incorrect');
+    }
+    return result;
 }
 ```
 
@@ -125,14 +126,7 @@ function createWordTiles(letterArr) {
 To present the user with a clear view of their previous guesses, I implemented a function that inserts each guess into the DOM in alphabetical order.
 ```javascript
 function showIncorrectGuesses(currentGuess) {
-    const incorrectGuessContainer = document.querySelector('#guesses-container');
-    const incorrectGuess = document.createElement('div');
-    const incorrectGuessText = document.createElement('span');
-
-    incorrectGuess.classList.add('guess');
     ...
-    incorrectGuess.appendChild(incorrectGuessText);
-
     // Sort alphabetically 
     const allIncorrectGuesses = document.querySelectorAll('.guess');
 
