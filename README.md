@@ -4,7 +4,26 @@ Word Express is a word guessing game inspired by the iconic NYC subway. This gam
 In Word Express, players must guess the letters of random word ranging from 3 to 7 characters, which is generated using the Random Word API. The game leverages the Browser Object Model (BOM) to prompt users to enter letters.
 
 ## Building the Game
-I opted to use API for this game to create a dynamic and engaging gameplay experience and ensure the user would receive a new word on each play. However, in the event that a word retrieval from the API encounters an issue, I have created a small predefined array of words to serve as a backup.
+I opted to use an API for this game to create a dynamic and engaging gameplay experience and ensure the user would receive a new word on each play. However, in the event that a word retrieval from the API encounters an issue, I have created a small predefined array of words to serve as a backup.
+```javascript
+async function getRandomWord() {
+  try {
+    const randomWordArr = [];
+
+    for (let length = 3; length <= 7; length++) {
+      const response = await fetch(randomWordAPI(length));
+      const randomWord = await response.json();
+      randomWordArr.push(randomWord[0]);
+    }
+
+    return randomWordArr[Math.floor(Math.random() * randomWordArr.length)];
+  } catch (error) {
+      console.log('Error:', error);
+      const wordArr = ['cozy', 'snuggle', ..., 'blithe'];
+      return wordArr[Math.floor(Math.random() * wordArr.length)];
+  }
+}
+```
 
 This code has been broken down into two modular scripts: 
 - game.js, which includes functions to handle gameplay, such as getUserGuess and checkGuess
@@ -69,7 +88,13 @@ return result;
 ```
 
 ### style.js
-This game is styled almost entirely via the DOM model. Notable UI features include letter tiles reminiscent of subway line names and a display of incorrect guesses, serving as a visual reminder of previous attempts for the user.
+This game is styled almost entirely via the DOM model. Notable UI features include a 3D effect to the subway sign, letter tiles reminiscent of subway line names and a display of incorrect guesses, serving as a visual reminder of previous attempts for the user.
+
+To create the illusion of a real, 3D sign, I utilized the CSS property perspective, a div representing the top edge of the sign, and a dropshadow.
+![Start page](/screenshots/start.png?raw=true "Start page")
+![Game page](/screenshots/game.png?raw=true "Game page")
+![Success](/screenshots/confetti.png?raw=true "Success")
+Upon successful completion of the word, confetti rains down.
 
 This function loops through the letters of an array to generate tiles for each letter. I used a traditional for loop to set distinct colors for the tiles based on its index.
 ```javascript
