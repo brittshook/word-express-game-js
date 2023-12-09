@@ -1,7 +1,7 @@
 const appWidth = () => (window.innerWidth * .82 <= 1180) ? window.innerWidth * .82 : 1180;
 
 function stylePage() {
-    document.body.style.background = 'url(https://img.freepik.com/free-photo/white-brick-wall-textured-background_53876-148139.jpg?w=1800&t=st=1701993609~exp=1701994209~hmac=4b267c1fadafe942e05087790e7cff37f497f0b93e319a61fc1d448b6bd3cd0c)';
+    document.body.style.background = 'url(imgs/brick_wall.png)';
     document.body.style.backgroundRepeat = 'repeat';
     document.body.style.margin = '0 auto';
     document.body.style.display = 'flex';
