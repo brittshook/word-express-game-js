@@ -6,13 +6,14 @@
 
 :root {
     --white: #FEFEFE;
+    --off-white: #ede7e7;
     --black: #20181A;
+    --black-translucent: #20181ABF;
     --yellow: #FFC501;
     --blue: #3438C7;
     --pink: #A529A3;
     --red: #D82C2C;
 }
-
 html, body {
     width: 100%;
     height: 100%;
