@@ -1,4 +1,4 @@
-import { stylePage, createWordTiles, showIncorrectGuesses, showModal } from "./style.js";
+import { stylePage, createWordTiles, showIncorrectGuesses, showModal, generateRandomConfetti } from "./style.js";
 
 const randomWordAPI = wordLength => `https://random-word-api.herokuapp.com/word?length=${wordLength}`;
 
@@ -59,7 +59,6 @@ async function playGame() {
 
   function checkGuess() {
     if (currentGuess === null) {
-      console.log('user clicked cancel');
       result = 'canceled';
     } else if (currentGuess === '' || currentGuess === undefined || !(/[a-zA-Z]/.test(currentGuess))) {
       result = 'invalid';
@@ -86,7 +85,7 @@ async function playGame() {
       });
 
       if (correctGuesses === letterArr.length) {
-        // success ui here
+        generateRandomConfetti();
       }
     } else if (result === 'incorrect') {
       showIncorrectGuesses(currentGuess);
@@ -109,8 +108,6 @@ async function playGame() {
     checkGuess();
     updateUI();
 
-    console.log(guessHistory);
-
     if (correctGuesses < letterArr.length && currentGuess !== null) {
       await new Promise((resolve) => setTimeout(resolve, 400));
       handleGuess();
@@ -120,9 +117,10 @@ async function playGame() {
   const startButton = document.querySelector('#start');
   startButton.addEventListener('click', () => {
     startButton.style.display = 'none';
+    document.querySelector('#instructions').style.display = 'none';
     document.querySelector('#tile-container').style.display = 'flex';
     document.querySelector('#guesses-container').style.display = 'flex';
-    document.querySelector('#app').style.perspective = '16em';
+    document.querySelector('#app').style.perspective = '21.5em';
     
     setTimeout(handleGuess, 200);
   });

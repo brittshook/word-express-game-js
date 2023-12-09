@@ -1,3 +1,5 @@
+const appWidth = () => (window.innerWidth * .82 <= 1180) ? window.innerWidth * .82 : 1180;
+
 function stylePage() {
     document.body.style.background = 'url(https://img.freepik.com/free-photo/white-brick-wall-textured-background_53876-148139.jpg?w=1800&t=st=1701993609~exp=1701994209~hmac=4b267c1fadafe942e05087790e7cff37f497f0b93e319a61fc1d448b6bd3cd0c)';
     document.body.style.backgroundRepeat = 'repeat';
@@ -7,12 +9,11 @@ function stylePage() {
     document.body.style.alignItems = 'center';
     document.body.style.fontFamily = 'Armino, sans-serif';
 
-
     const app = document.querySelector('#app');
     app.style.display = 'flex';
     app.style.flexDirection = 'column';
-    app.style.width = '82%';
-    app.style.perspective = '10em';
+    app.style.width = `${appWidth()}px`;
+    app.style.perspective = '16em';
 
     const subwaySign = document.createElement('div');
     subwaySign.id = 'subway-sign';
@@ -69,7 +70,6 @@ function stylePage() {
     startButton.style.width = '175px';
     startButton.style.height = '175px';
     startButton.style.backgroundColor = 'var(--yellow, #FFC501)';
-    startButton.style.border = 'none';
     startButton.style.cursor = 'pointer';
     startButton.type = 'button';
     startButton.id = 'start';
@@ -78,6 +78,12 @@ function stylePage() {
     startButton.onmouseover = () => startButton.style.backgroundColor = '#e5b002';
     startButton.onmouseleave = () => startButton.style.backgroundColor = 'var(--yellow, #FFC501)';
     headerContainer.appendChild(startButton);
+
+    const instructions = document.createElement('p');
+    instructions.id = 'instructions';
+    instructions.textContent = 'Press the arrow to begin.';
+    instructions.style.fontSize = '20px';
+    gameContainer.appendChild(instructions);
 
     const incorrectGuessContainer = document.createElement('div');
     incorrectGuessContainer.id = 'guesses-container';
@@ -106,8 +112,8 @@ function createWordTiles(letterArr) {
         const tileEl = document.createElement('div');
         tileContainer.appendChild(tileEl);
         tileEl.style.borderRadius = '100%';
-        tileEl.style.height = '140px';
-        tileEl.style.width = '140px';
+        tileEl.style.height = `${appWidth() * .12}px`;
+        tileEl.style.width = `${appWidth() * .12}px`;
         tileEl.style.display = 'flex';
         tileEl.style.justifyContent = 'center';
         tileEl.style.alignItems = 'center';
@@ -189,7 +195,6 @@ function showModal() {
     restartButton.style.width = '88px';
     restartButton.style.height = '88px';
     restartButton.style.backgroundColor = 'var(--off-white, #ede7e7)';
-    restartButton.style.border = 'none';
     restartButton.style.borderRadius = '100%';
     restartButton.style.display = 'flex';
     restartButton.style.justifyContent = 'center';
@@ -200,6 +205,30 @@ function showModal() {
     restartButton.onmouseleave = () => restartButton.style.backgroundColor = 'var(--off-white, #ede7e7)';
     modal.addEventListener('click', () => location.reload());
     modal.appendChild(restartButton);
+
+    const buttonLabel = document.createElement('p');
+    buttonLabel.textContent = 'Restart';
+    buttonLabel.style.color = 'var(--white, #fefefe)';
+    buttonLabel.style.fontSize = '22px';
+    buttonLabel.style.fontWeight = '500';
+    buttonLabel.style.cursor = 'pointer';
+    modal.appendChild(buttonLabel);
 }
 
-export { stylePage, createWordTiles, showIncorrectGuesses, showModal };
+function createConfetti() {
+    const confettiColors = ['#d13447', '#ffbf00', '#263672'];
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.top = '0';
+    confetti.style.left = `${Math.random() * window.innerWidth}px`;
+    confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * 3)];
+    confetti.addEventListener('animationiteration', () => document.body.removeChild(confetti));
+    document.body.appendChild(confetti);
+}
+
+function generateRandomConfetti() {
+    setInterval(createConfetti, 300); 
+}
+
+
+export { stylePage, createWordTiles, showIncorrectGuesses, showModal, generateRandomConfetti };
