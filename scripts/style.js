@@ -14,7 +14,7 @@ function stylePage() {
   
     const subwaySign = document.createElement('div');
     subwaySign.id = 'subway-sign';
-    subwaySign.style.backgroundColor = '#20181A';
+    subwaySign.style.backgroundColor = 'var(--black, #20181A)';
     subwaySign.style.height = 'fit-content';
     subwaySign.style.display = 'flex';
     subwaySign.style.flexDirection = 'column';
@@ -31,7 +31,7 @@ function stylePage() {
     app.insertBefore(topEdgeOfSign, subwaySign);
   
     const horizontalLine = document.createElement('hr');
-    horizontalLine.style.backgroundColor = '#FEFEFE';
+    horizontalLine.style.backgroundColor = 'var(--white, #FEFEFE)';
     horizontalLine.style.height = '3px';
     horizontalLine.style.width = '100%';
     horizontalLine.style.marginTop = '40px';
@@ -66,7 +66,7 @@ function stylePage() {
     startButton.style.borderRadius = '100%';
     startButton.style.width = '175px';
     startButton.style.height = '175px';
-    startButton.style.backgroundColor = '#FFC501';
+    startButton.style.backgroundColor = 'var(--yellow, #FFC501)';
     startButton.style.border = 'none';
     startButton.style.cursor = 'pointer';
     startButton.type = 'button';
@@ -98,7 +98,6 @@ tileContainer.style.display = 'none';
 tileContainer.style.gap = '20px';
 gameContainer.appendChild(tileContainer);
 
-const tileColors = ['#3438C7', '#FFC501', '#A529A3'];
 for (let letter = 0; letter < letterArr.length; letter++) {
     const tileEl = document.createElement('div');
     tileContainer.appendChild(tileEl);
@@ -113,12 +112,12 @@ for (let letter = 0; letter < letterArr.length; letter++) {
     tileEl.style.fontWeight = '700';
 
     if (letter < 3) {
-        tileEl.style.backgroundColor = tileColors[0];
+        tileEl.style.backgroundColor = 'var(--blue, #3438C7)';
     } else if (letter < 6) {
-        tileEl.style.backgroundColor = tileColors[1];
-        tileEl.style.color = "#20181A";
+        tileEl.style.backgroundColor = 'var(--yellow, #FFC501)';
+        tileEl.style.color = 'var(--black, #20181A)';
     } else {
-        tileEl.style.backgroundColor = tileColors[2];
+        tileEl.style.backgroundColor = 'var(--pink, #A529A3)';
     }
 
     const letterEl = document.createElement('p');
@@ -130,18 +129,18 @@ for (let letter = 0; letter < letterArr.length; letter++) {
 }
 
 function showIncorrectGuesses(currentGuess) {
-    const incorrectGuessContainer = document.querySelector("#guesses-container");
-    const incorrectGuess = document.createElement("div");
-    const incorrectGuessText = document.createElement("span");
+    const incorrectGuessContainer = document.querySelector('#guesses-container');
+    const incorrectGuess = document.createElement('div');
+    const incorrectGuessText = document.createElement('span');
 
     incorrectGuess.classList.add('guess');
-    incorrectGuess.style.backgroundColor = "#D82C2C";
-    incorrectGuess.style.height = "24px";
-    incorrectGuess.style.width = "24px";
-    incorrectGuess.style.borderRadius = "100%";
-    incorrectGuess.style.display = "flex";
-    incorrectGuess.style.justifyContent = "center";
-    incorrectGuess.style.alignItems = "center";
+    incorrectGuess.style.backgroundColor = 'var(--red, #D82C2C)';
+    incorrectGuess.style.height = '24px';
+    incorrectGuess.style.width = '24px';
+    incorrectGuess.style.borderRadius = '100%';
+    incorrectGuess.style.display = 'flex';
+    incorrectGuess.style.justifyContent = 'center';
+    incorrectGuess.style.alignItems = 'center';
     incorrectGuessText.textContent = currentGuess[0].toLowerCase();
     incorrectGuess.appendChild(incorrectGuessText);
 

@@ -4,6 +4,15 @@
     box-sizing: border-box;
 }
 
+:root {
+    --white: #FEFEFE;
+    --black: #20181A;
+    --yellow: #FFC501;
+    --blue: #3438C7;
+    --pink: #A529A3;
+    --red: #D82C2C;
+}
+
 html, body {
     width: 100%;
     height: 100%;
